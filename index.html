@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Happy 64th Birthday</title>
+	<style>
+	body{
+		background: red;
+		background: -webkit-linear-gradient(#F00, #600);
+		background: -o-linear-gradient(#F00, #600);
+		background: -moz-linear-gradient(#F00, #600);
+		background: linear-gradient(#F00, #600);
+		height: 100vh;
+		width: 100vw;
+		/*padding: 0;*/
+		margin-left: 0;
+	}
+	span{
+		position: absolute;
+		width: 64px;
+		height: 64px;
+		border-radius: 16px;
+		display: block;
+	}
+	</style>
+</head>
+<body style='overflow: hidden;'>
+<audio src='ENFP.mp3'></audio>
+<img src='ENFP.jpg' style='width: 95%; padding-left: 2%; padding-right: 2%; margin-left: 0.5%; margin-right: 0.5%'/><br/>
+<center>
+<h2>Happy Birthday<br/>Grandma M!!</h2>
+<!-- <h3>Click <b onclick='clickhereforballoons()'>[HERE]</b> for extra balloons</h3> -->
+</center>
+<!-- ENFP.mp3 is iTune's name for "When I'm 64" -->
+<script>
+var wind = 0;
+var windUpdate = function(){
+	wind+=Math.random()*8-4;
+};
+window.onload = function(){  //when the window loads
+	document.querySelector("audio").currentTime = 0;
+	document.querySelector("audio").play();//the audio will play
+	clickhereforballoons(16);
+};
+document.querySelector("audio").onended = function(){//when it ends
+	clickhereforballoons(); //spawn ballons and
+	setTimeout(window.onload, 2500); //it will restart 2.5 secs later
+};
+function clickhereforballoons(amount){
+	for(var i = 0; i < Math.random()*(amount||4)+4; i++){
+		entities.push(new Balloon());
+	};
+	setTimeout(clickhereforballoons, 2000);
+};
+var entities = [];
+function Balloon(){
+	this.x = Math.random()*100;
+	this.y = 99+(Math.random()*20);
+	this.vy = -Math.random()/5;
+	this.vx = wind;
+	this.show = function(){
+		if(this.y > -1){
+			this.elem.style.left = this.x + '%';
+			this.elem.style.top = this.y + '%';
+		} else {
+			this.elem.style.display='none';
+			document.body.removeChild(this.elem);
+			this.show = function(){};
+		};
+		if(wind>this.vx)this.vx+=0.1;
+		if(wind<this.vx)this.vx-=0.1;
+		this.x+=this.vx;
+		this.vy-=0.01;
+		this.y+=this.vy;
+	};
+	this.elem = document.createElement('span');
+	this.elem.innerHTML = '';
+	this.elem.class = 'balloon';
+	this.elem.style.background = Balloon.randomColour();
+	document.body.appendChild(this.elem);
+};
+Balloon.randomColour = function(){
+	return 'rgb(RED, GREEN, BLUE)'.replace(/RED/g, Math.floor(Math.random()*255)).replace(/GREEN/g,Math.floor(Math.random()*255)).replace(/BLUE/g,Math.floor(Math.random()*255));
+};
+function draw(){
+	wind*=0.98;
+	if(Math.random()<0.02) windUpdate();
+	var remove_queue = [];
+	for(var i = 0; i < entities.length; i ++){
+		entities[i].show();
+	};
+	// for (var i = 0; i < remove_queue.length; i++) {
+	// 	entities.splice(remove_queue[i])
+	// }
+	setTimeout(draw, 1000/30)
+};
+draw();
+window.oncontextmenu = function(e){
+	// window.onclick(e);
+	e.preventDefault();
+	clickhereforballoons(16);
+};
+</script>
+</body>
+</html>
